@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <h1 class="gradient-text">Redefine Your Space with AI</h1>
+    <p class="subtitle">Gruha Alankara uses advanced Agentic AI and Augmented Reality to visualize furniture in your
+        room instantly.</p>
+    <a href="{{ url_for('design') }}" class="btn primary-btn">Start Designing</a>
+</div>
+
+<div class="features-grid">
+    <div class="card feature-card">
+        <h3 style="color: var(--accent-color);">📷 AR Visualizer</h3>
+        <p style="color: var(--text-secondary);">See furniture in your actual room using your mobile camera.</p>
+    </div>
+    <div class="card feature-card">
+        <h3 style="color: var(--accent-color);">🤖 Agentic AI</h3>
+        <p style="color: var(--text-secondary);">Get personalized style and layout recommendations.</p>
+    </div>
+    <div class="card feature-card">
+        <h3 style="color: var(--accent-color);">🗣️ Voice Assistant</h3>
+        <p style="color: var(--text-secondary);">Interact in Telugu, Hindi, or English to book seamlessly.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 2rem;">
+    <h2 style="color: var(--accent-color);">Redesign Your Space</h2>
+    <p style="color: var(--text-secondary);">1. Point your camera at the room. 2. Choose a style. 3. Capture!</p>
+
+    <div class="camera-container" style="margin-top: 1.5rem;">
+        <video id="cameraFeed" autoplay playsinline></video>
+    </div>
+
+    <h3 style="margin-top: 2.5rem; color: var(--text-primary);">Select a Design Theme</h3>
+    <div class="theme-grid" id="themeGrid" style="margin-top: 1rem;">
+        <div class="card theme-card" data-theme="Modern">Modern Minimalist</div>
+        <div class="card theme-card" data-theme="Bohemian">Bohemian Chic</div>
+        <div class="card theme-card" data-theme="Industrial">Industrial Loft</div>
+        <div class="card theme-card" data-theme="Traditional">Classic Traditional</div>
+    </div>
+    <div style="margin-top: 2rem;">
+        <label for="languageSelect" style="color: var(--text-secondary); margin-right: 10px;">Buddy's Language:</label>
+        <select id="languageSelect"
+            style="padding: 0.5rem; border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--glass-border);">
+            <option value="en">English</option>
+            <option value="hi">Hindi (हिंदी)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+        </select>
+    </div>
+
+    <br>
+    <button id="captureBtn" class="btn" style="margin-top: 1rem; max-width: 300px;">Capture & Apply Theme</button>
+    <canvas id="captureCanvas" style="display: none;"></canvas>
+
+</div>
+{% endblock %}
