@@ -1,7 +1,7 @@
 
 # 🛋️ Gruha Alankara
 
-Welcome to **Gruha Alankara**, an AI-powered AR Interior Design application. Instantly see how beautiful furniture fits into your real space using advanced computer vision and Agentic AI!
+Welcome to **Gruha Alankara**, an AI-powered AR Interior Design application. Instantly see how beautiful furniture fits into your real space using advanced computer vision and Agentic AI! 
 
 ## ✨ Key Features
 - 📷 **AR Visualizer**: Use your mobile camera to see how furniture fits and looks in your actual room instantly.
