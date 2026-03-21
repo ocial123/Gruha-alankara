@@ -1,49 +1,59 @@
-Gruha Alankara 🏠✨
-Gruha Alankara is an innovative interior design platform that leverages Agentic AI and Augmented Reality (AR) to help users visualize and redefine their living spaces. Whether you're looking for layout recommendations or want to see furniture in your room via AR, Gruha Alankara bridges the gap between imagination and reality.
+---
+title: Gruha Alankara
+emoji: 🛋️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
 
-🚀 Key Features
-🤖 Agentic AI Assistant: Get personalized style advice and spatial layout recommendations through an intelligent AI agent (ai_agent.py).
+# 🛋️ Gruha Alankara
 
-📷 AR Visualizer: Use your mobile camera to see how furniture fits and looks in your actual room instantly.
+Welcome to **Gruha Alankara**, an AI-powered AR Interior Design application. Instantly see how beautiful furniture fits into your real space using advanced computer vision and Agentic AI!
 
-🗣️ Multilingual Voice Assistant: Interact naturally using voice commands in Telugu, Hindi, or English.
+## ✨ Key Features
+- 📷 **AR Visualizer**: Use your mobile camera to see how furniture fits and looks in your actual room instantly.
+- 🗣️ **Multilingual Voice Assistant**: Interact naturally with your AI Buddy using voice commands in Telugu, Hindi, or English.
+- 📊 **User Dashboard**: Manage your designs, saved layouts, and preferences through a dedicated, personalized dashboard interface.
 
-📊 User Dashboard: Manage your designs, saved layouts, and preferences through a dedicated My Dashboard interface.
+## 🧰 Tech Stack
+- **Backend**: Python (Flask)
+- **Frontend**: HTML5, Vanilla CSS3, JavaScript
+- **AI/ML**: Agentic AI frameworks & local Hugging Face Transformers (`blip-image-captioning-base`) for personalized spatial recommendations.
+- **Deployment**: Hugging Face Spaces (Dockerized)
 
-🛠️ Tech Stack
-Backend: Python (Flask/FastAPI)
+## 🚀 Installation & Setup
 
-Frontend: HTML5, CSS3, JavaScript
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ocial123/Gruha-alankara.git
+   cd Gruha-alankara
+   ```
 
-AI/ML: Agentic AI frameworks for personalized recommendations.
+2. **Install dependencies:**
+   Make sure you have Python 3.10+ installed.
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Deployment: Hugging Face Spaces
+3. **Set up Environment Variables:**
+   Create a `.env` file in the root directory and add your Hugging Face API Token (needed for the AI agent):
+   ```env
+   HUGGINGFACEHUB_API_TOKEN=your_hf_token_here
+   SECRET_KEY=super-secret-gruha-key
+   ```
 
-📦 Installation & Setup
-Clone the repository:
+4. **Run the application locally:**
+   ```bash
+   python app.py
+   ```
+   *The application will launch locally at `http://localhost:5000`.*
 
-Bash
-git clone https://github.com/ocial123/Gruha-alankara.git
-cd Gruha-alankara
-Install dependencies:
+---
 
-Bash
-pip install -r requirements.txt
-Run the application:
-
-Bash
-python app.py
-📂 Project Structure
-app.py: The main entry point for the web application.
-
-ai_agent.py: Logic for the AI-driven design recommendations.
-
-models.py: Database schemas and data structures.
-
-static/: Contains assets like CSS, images, and client-side JS.
-
-templates/: HTML templates for the user interface.
-
-🌟 Live Demo
-Experience the app live on Hugging Face:
-Gruha Alankara Live Space
+## 📂 Architecture & Structure
+- `app.py`: The main entry point and route handler for the Flask web application.
+- `ai_agent.py`: Handles AI pipeline integrations, computer vision, text-generation logic, and voice synthesis.
+- `models.py`: Defines the SQLAlchemy database schemas for Users, Designs, Bookings, and Furniture.
+- `config.py`: Application configurations and cross-site cookie settings (required for Hugging Face Spaces iframes).
+- `Dockerfile`: Production deployment instructions utilized by Hugging Face Spaces to build the container.
