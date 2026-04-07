@@ -37,11 +37,11 @@ with app.app_context():
     # Seed furniture if the table is empty
     if not Furniture.query.first():
         sample_items = [
-            Furniture(name="Sleek Leather Sofa", category="Modern", price=45000),
-            Furniture(name="Glass Center Table", category="Modern", price=15000),
-            Furniture(name="Rattan Chair", category="Bohemian", price=8500),
-            Furniture(name="Vintage Persian Rug", category="Bohemian", price=12000),
-            Furniture(name="Industrial Metal Lamp", category="Industrial", price=3500)
+            Furniture(name="Sleek Leather Sofa", category="Modern", price=45000, image_url="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80"),
+            Furniture(name="Glass Center Table", category="Modern", price=15000, image_url="https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=500&q=80"),
+            Furniture(name="Rattan Chair", category="Bohemian", price=8500, image_url="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=500&q=80"),
+            Furniture(name="Vintage Persian Rug", category="Bohemian", price=12000, image_url="https://images.unsplash.com/photo-1600166898405-da9535204843?w=500&q=80"),
+            Furniture(name="Industrial Metal Lamp", category="Industrial", price=3500, image_url="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=500&q=80")
         ]
         db.session.add_all(sample_items)
         db.session.commit()
