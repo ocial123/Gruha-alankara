@@ -3,6 +3,7 @@ from flask_caching import Cache
 import uuid
 import json
 from ai_agent import process_room_design
+from cv_analyzer import analyze_room_image
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from config import Config
 from models import db, User, Design, Furniture, Booking
@@ -104,7 +105,6 @@ def design():
     return render_template('design.html')
 
 @app.route('/upload', methods=['POST'])
-@cache.memoize(timeout=3600) # Caches the output based on the route parameters
 def upload():
     # ... your existing upload logic ...
     if 'user_id' not in session:
@@ -123,6 +123,11 @@ def upload():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
+        # Analyze image with CV Analyzer
+        cv_result = analyze_room_image(filepath)
+        if not cv_result.get("is_room"):
+            return {"error": cv_result.get("error", "Image is not recognized as a valid room.")}, 400
+            
         # Trigger the AI pipeline
         ai_text, audio_file, ai_image = process_room_design(filename, theme, language)
         

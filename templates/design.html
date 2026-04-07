@@ -5,7 +5,13 @@
     <h2 style="color: var(--accent-color);">Redesign Your Space</h2>
     <p style="color: var(--text-secondary);">1. Point your camera at the room. 2. Choose a style. 3. Capture!</p>
 
-    <div class="camera-container" style="margin-top: 1.5rem;">
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem;">
+        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+        <button id="btn-gallery-upload" class="btn primary-btn" onclick="document.getElementById('image-upload').click()" style="max-width: max-content;">Upload from Gallery</button>
+        <button id="btn-camera-upload" class="btn" style="max-width: max-content;">Use Camera</button>
+    </div>
+
+    <div class="camera-container" id="cameraContainer" style="margin-top: 1.5rem; display: none;">
         <video id="cameraFeed" autoplay playsinline></video>
     </div>
 
@@ -27,7 +33,7 @@
     </div>
 
     <br>
-    <button id="captureBtn" class="btn" style="margin-top: 1rem; max-width: 300px;">Capture & Apply Theme</button>
+    <button id="captureBtn" class="btn" style="margin-top: 1rem; max-width: 300px; display: none;">Capture & Apply Theme</button>
     <canvas id="captureCanvas" style="display: none;"></canvas>
 
 </div>

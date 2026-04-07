@@ -15,15 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(stream => {
-            videoElement.srcObject = stream;
-            videoElement.play();
-        })
-        .catch(err => {
-            console.error("Camera error: ", err);
-            alert("Unable to access the camera. Please check your browser permissions.");
+    function startCamera() {
+        const camContainer = document.getElementById('cameraContainer');
+        if (camContainer) camContainer.style.display = 'block';
+        captureBtn.style.display = 'inline-block';
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                videoElement.srcObject = stream;
+                videoElement.play();
+            })
+            .catch(err => {
+                console.error("Camera error: ", err);
+                alert("Unable to access the camera. Please check your browser permissions.");
+            });
+    }
+
+    const btnCameraUpload = document.getElementById('btn-camera-upload');
+    if (btnCameraUpload) {
+        btnCameraUpload.addEventListener('click', () => {
+            document.dispatchEvent(new Event('start-ar-camera'));
         });
+    }
+
+    document.addEventListener('start-ar-camera', () => {
+        startCamera();
+    });
 
     // 2. Theme Selection Logic
     let selectedTheme = "Modern"; // Default theme
@@ -83,6 +99,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         captureBtn.disabled = false;
                     });
             }, 'image/jpeg', 0.9);
+        });
+    }
+
+    // 4. Gallery Upload Logic
+    const imageUpload = document.getElementById('image-upload');
+    if (imageUpload) {
+        imageUpload.addEventListener('change', (e) => {
+            if (!e.target.files.length) return;
+            const file = e.target.files[0];
+            const formData = new FormData();
+            const selectedLanguage = document.getElementById('languageSelect').value;
+            
+            formData.append('image', file);
+            formData.append('theme', selectedTheme);
+            formData.append('language', selectedLanguage);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else if (data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                alert("Failed to upload image.");
+            });
         });
     }
 });

@@ -21,15 +21,26 @@
         <h3 style="color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">
             Recommended for You</h3>
 
-        <div class="grid-system" style="margin-top: 1.5rem;">
+        <div class="grid-system" style="margin-top: 2rem;">
             {% for item in furniture %}
-            <div class="card" style="padding: 1rem; text-align: center;">
-                <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">{{ item.name }}</h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">₹{{ item.price }}</p>
+            <div class="product-card">
+                <div class="product-img-container">
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" alt="{{ item.name }}" class="product-img">
+                    {% else %}
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary)); display: flex; align-items: center; justify-content: center; font-size: 3rem;">✨</div>
+                    {% endif %}
+                    <span class="product-tag">{{ item.category }}</span>
+                </div>
+                
+                <div class="product-details">
+                    <h4 class="product-title">{{ item.name }}</h4>
+                    <p class="product-price">₹{{ '{:,.0f}'.format(item.price) }}</p>
 
-                <form action="{{ url_for('book', furniture_id=item.id) }}" method="POST">
-                    <button type="submit" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Book Now</button>
-                </form>
+                    <form action="{{ url_for('book', furniture_id=item.id) }}" method="POST" style="margin-top: auto;">
+                        <button type="submit" class="btn" style="padding: 0.7rem; font-size: 0.95rem; border-radius: 8px; width: 100%;">Reserve This Item</button>
+                    </form>
+                </div>
             </div>
             {% else %}
             <p style="color: var(--text-secondary);">No specific furniture found for this theme yet.</p>
