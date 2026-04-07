@@ -2,9 +2,8 @@ import os
 import json
 from PIL import Image
 from transformers import pipeline
+from gtts import gTTS
 import asyncio
-import threading
-import edge_tts
 from langchain.llms import HuggingFaceHub
 from cv_analyzer import get_latest_context
 from dotenv import load_dotenv
@@ -75,32 +74,25 @@ def process_room_design(filename, theme, language='en'):
         ai_output = {"error": str(e), "recommendations": ai_text}
 
     # Step 3: Multilingual Voice Assistant
+    tld = 'com'
     if language == 'hi':
         ai_text = "मैंने आपके कमरे का विश्लेषण किया है। " + ai_text
-        voice = 'hi-IN-SwaraNeural'
+        lang = 'hi'
+        tld = 'co.in'
     elif language == 'te':
         ai_text = "నేను మీ గదిని విశ్లేషించాను. " + ai_text
-        voice = 'te-IN-ShrutiNeural'
+        lang = 'te'
+        tld = 'co.in'
     else:
-        voice = 'en-US-AriaNeural'
+        lang = 'en'
+        tld = 'co.uk' # professional British designer dialect instead of robotic US
 
     audio_filename = f"audio_{filename.split('.')[0]}.mp3"
     audio_path = os.path.join('static', 'uploads', audio_filename)
     
     try:
-        def _run_tts_thread():
-            async def _generate_audio():
-                communicate = edge_tts.Communicate(ai_text, voice)
-                await communicate.save(audio_path)
-                
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(_generate_audio())
-            loop.close()
-            
-        t = threading.Thread(target=_run_tts_thread)
-        t.start()
-        t.join()
+        tts = gTTS(text=ai_text, lang=lang, tld=tld)
+        tts.save(audio_path)
     except Exception as e:
         print(f"Audio Error: {e}")
 
