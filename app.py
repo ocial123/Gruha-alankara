@@ -117,45 +117,46 @@ def design():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    # ... your existing upload logic ...
-    if 'user_id' not in session:
-        return {"error": "Unauthorized. Please log in."}, 401
+    try:
+        if 'user_id' not in session:
+            return {"error": "Unauthorized. Please log in."}, 401
 
-    if 'image' not in request.files:
-        return {"error": "No image provided."}, 400
-        
-    file = request.files['image']
-    theme = request.form.get('theme', 'Modern')
-    language = request.form.get('language', 'en') # Support for multilingual
-    
-    if file and allowed_file(file.filename):
-        ext = file.filename.rsplit('.', 1)[1].lower()
-        filename = f"{uuid.uuid4().hex}.{ext}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-        
-        # Analyze image with CV Analyzer
-        cv_result = analyze_room_image(filepath)
-        if not cv_result.get("is_room"):
-            return {"error": cv_result.get("error", "Image is not recognized as a valid room.")}, 400
+        if 'image' not in request.files:
+            return {"error": "No image provided."}, 400
             
-        # Trigger the AI pipeline
-        ai_text, audio_file, ai_image = process_room_design(filename, theme, language)
+        file = request.files['image']
+        theme = request.form.get('theme', 'Modern')
+        language = request.form.get('language', 'en')
         
-        # Update database
-        new_design = Design(
-            user_id=session['user_id'], 
-            image_path=filename,
-            selected_theme=theme,
-            ai_output=ai_text
-        )
-        db.session.add(new_design)
-        db.session.commit()
-        
-        # Redirect to the result page (we will build this next)
-        return {"redirect": url_for('result', design_id=new_design.id)}, 200
-        
-    return {"error": "Invalid file type."}, 400
+        if file and allowed_file(file.filename):
+            ext = file.filename.rsplit('.', 1)[1].lower()
+            filename = f"{uuid.uuid4().hex}.{ext}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            
+            # Analyze image with CV Analyzer
+            cv_result = analyze_room_image(filepath)
+            if not cv_result.get("is_room"):
+                return {"error": cv_result.get("error", "Image is not recognized as a valid room.")}, 400
+                
+            # Trigger the AI pipeline
+            ai_text, audio_file, ai_image = process_room_design(filename, theme, language)
+            
+            # Update database
+            new_design = Design(
+                user_id=session['user_id'], 
+                image_path=filename,
+                selected_theme=theme,
+                ai_output=ai_text
+            )
+            db.session.add(new_design)
+            db.session.commit()
+            
+            return {"redirect": url_for('result', design_id=new_design.id)}, 200
+            
+        return {"error": "Invalid file type."}, 400
+    except Exception as e:
+        return {"error": f"Server crash: {str(e)}"}, 500
 
 @app.route('/book/<int:furniture_id>', methods=['POST'])
 def book(furniture_id):
