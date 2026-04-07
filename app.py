@@ -32,19 +32,28 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # 1. Update your app_context to add dummy furniture data
-with app.app_context():
-    db.create_all()
-    # Seed furniture if the table is empty
-    if not Furniture.query.first():
-        sample_items = [
-            Furniture(name="Sleek Leather Sofa", category="Modern", price=45000, image_url="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80"),
-            Furniture(name="Glass Center Table", category="Modern", price=15000, image_url="https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=500&q=80"),
-            Furniture(name="Rattan Chair", category="Bohemian", price=8500, image_url="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=500&q=80"),
-            Furniture(name="Vintage Persian Rug", category="Bohemian", price=12000, image_url="https://images.unsplash.com/photo-1600166898405-da9535204843?w=500&q=80"),
-            Furniture(name="Industrial Metal Lamp", category="Industrial", price=3500, image_url="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=500&q=80")
-        ]
-        db.session.add_all(sample_items)
-        db.session.commit()
+    # Force recreate furniture catalog dynamically without sticking to old local DB bounds
+    Furniture.query.delete()
+    sample_items = [
+        # Modern Theme
+        Furniture(name="Sleek Leather Sofa", category="Modern", price=45000, image_url="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80"),
+        Furniture(name="Glass Center Table", category="Modern", price=15000, image_url="https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=500&q=80"),
+        Furniture(name="Minimalist Shelf", category="Modern", price=9500, image_url="https://images.unsplash.com/photo-1595514535415-842273ac3299?w=500&q=80"),
+        Furniture(name="Floating Wall Canvas", category="Modern", price=5500, image_url="https://images.unsplash.com/photo-1579762715111-a6c40cb81ed0?w=500&q=80"),
+
+        # Bohemian Theme
+        Furniture(name="Rattan Lounge Chair", category="Bohemian", price=8500, image_url="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=500&q=80"),
+        Furniture(name="Vintage Persian Rug", category="Bohemian", price=12000, image_url="https://images.unsplash.com/photo-1600166898405-da9535204843?w=500&q=80"),
+        Furniture(name="Handwoven Macrame", category="Bohemian", price=2500, image_url="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=80"),
+        Furniture(name="Tropical Potted Monstera", category="Bohemian", price=1500, image_url="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=500&q=80"),
+
+        # Industrial Theme
+        Furniture(name="Exposed Metal Lamp", category="Industrial", price=3500, image_url="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=500&q=80"),
+        Furniture(name="Steel Frame Rack", category="Industrial", price=18000, image_url="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=500&q=80"),
+        Furniture(name="Distressed Leather Chair", category="Industrial", price=28000, image_url="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=500&q=80")
+    ]
+    db.session.add_all(sample_items)
+    db.session.commit()
 
 @app.route('/')
 def index():
