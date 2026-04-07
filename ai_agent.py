@@ -3,6 +3,7 @@ import json
 from PIL import Image
 from transformers import pipeline
 import asyncio
+import threading
 import edge_tts
 from langchain.llms import HuggingFaceHub
 from cv_analyzer import get_latest_context
@@ -87,9 +88,19 @@ def process_room_design(filename, theme, language='en'):
     audio_path = os.path.join('static', 'uploads', audio_filename)
     
     try:
-        import subprocess
-        # Use subprocess to strictly bypass Python asyncio thread conflicts running in Gunicorn
-        subprocess.run(["edge-tts", "--text", ai_text, "--voice", voice, "--write-media", audio_path], check=True)
+        def _run_tts_thread():
+            async def _generate_audio():
+                communicate = edge_tts.Communicate(ai_text, voice)
+                await communicate.save(audio_path)
+                
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(_generate_audio())
+            loop.close()
+            
+        t = threading.Thread(target=_run_tts_thread)
+        t.start()
+        t.join()
     except Exception as e:
         print(f"Audio Error: {e}")
 
