@@ -87,11 +87,9 @@ def process_room_design(filename, theme, language='en'):
     audio_path = os.path.join('static', 'uploads', audio_filename)
     
     try:
-        async def _generate_audio():
-            communicate = edge_tts.Communicate(ai_text, voice)
-            await communicate.save(audio_path)
-            
-        asyncio.run(_generate_audio())
+        import subprocess
+        # Use subprocess to strictly bypass Python asyncio thread conflicts running in Gunicorn
+        subprocess.run(["edge-tts", "--text", ai_text, "--voice", voice, "--write-media", audio_path], check=True)
     except Exception as e:
         print(f"Audio Error: {e}")
 
