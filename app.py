@@ -32,6 +32,8 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # 1. Update your app_context to add dummy furniture data
+with app.app_context():
+    db.create_all()
     # Force recreate furniture catalog dynamically without sticking to old local DB bounds
     Furniture.query.delete()
     sample_items = [
