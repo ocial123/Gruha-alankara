@@ -2,8 +2,6 @@ import os
 import json
 from PIL import Image
 from transformers import pipeline
-from gtts import gTTS
-import asyncio
 from langchain.llms import HuggingFaceHub
 from cv_analyzer import get_latest_context
 from dotenv import load_dotenv
@@ -74,26 +72,9 @@ def process_room_design(filename, theme, language='en'):
         ai_output = {"error": str(e), "recommendations": ai_text}
 
     # Step 3: Multilingual Voice Assistant
-    tld = 'com'
     if language == 'hi':
         ai_text = "मैंने आपके कमरे का विश्लेषण किया है। " + ai_text
-        lang = 'hi'
-        tld = 'co.in'
     elif language == 'te':
         ai_text = "నేను మీ గదిని విశ్లేషించాను. " + ai_text
-        lang = 'te'
-        tld = 'co.in'
-    else:
-        lang = 'en'
-        tld = 'co.uk' # professional British designer dialect instead of robotic US
 
-    audio_filename = f"audio_{filename.split('.')[0]}.mp3"
-    audio_path = os.path.join('static', 'uploads', audio_filename)
-    
-    try:
-        tts = gTTS(text=ai_text, lang=lang, tld=tld)
-        tts.save(audio_path)
-    except Exception as e:
-        print(f"Audio Error: {e}")
-
-    return json.dumps(ai_output), audio_filename, filename
+    return json.dumps(ai_output), "client_audio.mp3", filename
